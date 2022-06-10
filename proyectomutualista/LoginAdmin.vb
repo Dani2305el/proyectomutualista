@@ -1,4 +1,5 @@
-﻿Imports MySqlConnector
+﻿Imports System.Configuration
+Imports MySqlConnector
 
 Public Class LoginAdmin
 
@@ -27,8 +28,11 @@ Public Class LoginAdmin
         Dim contrasenia As String = txtPass.Text
 
         If Not String.IsNullOrEmpty(correo) And Not String.IsNullOrEmpty(contrasenia) Then
-            'cadena de conexion
-            Dim cadenaConexion As String = "server=localhost;database=db_mutualista;user id=root;password=2305;port=3306;"
+
+            'cadena de conexion del archivo App.config
+            Dim settings = ConfigurationManager.ConnectionStrings
+            Dim cadenaConexion As String = (From s In settings Where s.Name = "cadenaDeConexionMySql" Select s.connectionString).Take(1).First()
+
             Dim conn As New MySqlConnection(cadenaConexion)
 
             'query
@@ -62,8 +66,7 @@ Public Class LoginAdmin
 
             conn.Close()
         Else
-        MessageBox.Show("Debes completar los campos")
+            MessageBox.Show("Debes completar los campos")
         End If
-
     End Sub
 End Class

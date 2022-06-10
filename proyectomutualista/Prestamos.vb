@@ -1,4 +1,5 @@
-﻿Imports MySqlConnector
+﻿Imports System.Configuration
+Imports MySqlConnector
 
 Public Class Prestamos
     Private Sub Prestamos_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -15,8 +16,10 @@ Public Class Prestamos
         dataPrestamos.Columns.Add("pago_fijo", "Pago fijo")
         dataPrestamos.Columns.Add("total", "Total")
 
-        'cadena de conexion
-        Dim cadenaConexion As String = "server=localhost;database=db_mutualista;user id=root;password=2305;port=3306;"
+        'cadena de conexion del archivo App.config
+        Dim settings = ConfigurationManager.ConnectionStrings
+        Dim cadenaConexion As String = (From s In settings Where s.Name = "cadenaDeConexionMySql" Select s.connectionString).Take(1).First()
+
         Dim conn As New MySqlConnection(cadenaConexion)
 
         'query
@@ -59,8 +62,11 @@ Public Class Prestamos
                                   MessageBoxButtons.YesNo)
 
             If result = DialogResult.Yes Then
-                'cadena de conexion
-                Dim cadenaConexion As String = "server=localhost;database=db_mutualista;user id=root;password=2305;port=3306;"
+
+                'cadena de conexion del archivo App.config
+                Dim settings = ConfigurationManager.ConnectionStrings
+                Dim cadenaConexion As String = (From s In settings Where s.Name = "cadenaDeConexionMySql" Select s.connectionString).Take(1).First()
+
                 Dim conn As New MySqlConnection(cadenaConexion)
 
                 'query

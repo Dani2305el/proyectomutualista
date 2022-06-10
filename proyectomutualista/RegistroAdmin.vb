@@ -1,4 +1,5 @@
-﻿Imports MySqlConnector
+﻿Imports System.Configuration
+Imports MySqlConnector
 
 Public Class RegistroAdmin
 
@@ -18,7 +19,10 @@ Public Class RegistroAdmin
                 txtPass.Focus()
                 MessageBox.Show("Las contraseñas no coinciden")
             Else
-                Dim cadenaConexion As String = "server=localhost;database=db_mutualista;user id=root;password=2305;port=3306;"
+                'cadena de conexion del archivo App.config
+                Dim settings = ConfigurationManager.ConnectionStrings
+                Dim cadenaConexion As String = (From s In settings Where s.Name = "cadenaDeConexionMySql" Select s.connectionString).Take(1).First()
+
                 Dim conn As New MySqlConnection(cadenaConexion)
 
                 Dim cadena As String = "insert into administradores(nombres,apellidos,correo,contrasenia) values ('" & nombres & "','" & apellidos & "','" & correo & "','" & contrasenia & "')"

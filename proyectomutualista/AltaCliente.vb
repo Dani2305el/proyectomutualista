@@ -1,5 +1,6 @@
-﻿Imports MySqlConnector
+﻿Imports System.Configuration
 
+Imports MySqlConnector
 Public Class AltaCliente
     Private Sub Label1_Click(sender As Object, e As EventArgs)
 
@@ -29,7 +30,10 @@ Public Class AltaCliente
             Not String.IsNullOrEmpty(monto) And Not String.IsNullOrEmpty(periodo) And
             Not String.IsNullOrEmpty(plazo) And Not String.IsNullOrEmpty(interes) Then
 
-            Dim cadenaConexion As String = "server=localhost;database=db_mutualista;user id=root;password=2305;port=3306;"
+            'cadena de conexion del archivo App.config
+            Dim settings = ConfigurationManager.ConnectionStrings
+            Dim cadenaConexion As String = (From s In settings Where s.Name = "cadenaDeConexionMySql" Select s.connectionString).Take(1).First()
+
             Dim conn As New MySqlConnection(cadenaConexion)
 
             Dim interes_por_pagar = (monto * (interes / 100)) * plazo
@@ -59,5 +63,9 @@ Public Class AltaCliente
         Else
             MessageBox.Show("Debes completar los campos")
         End If
+
+
+
+
     End Sub
 End Class
